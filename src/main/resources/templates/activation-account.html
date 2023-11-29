@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="form-block w-form">
+    <form th:action="@{{host}/auth/verify(host=${host})}"
+          method="get">
+        <input type="hidden"
+               name="token"
+               th:value="${token}">
+        <input type="submit"
+               value="Activate My Account"
+               class="activation-button">
+    </form>
+</div>
+</body>
+</html>
