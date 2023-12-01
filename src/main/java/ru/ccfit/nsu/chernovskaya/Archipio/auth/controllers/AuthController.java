@@ -29,11 +29,9 @@ public class AuthController {
     private final ModelMapper modelMapper;
 
     @PostMapping("/register")
-    public ResponseEntity<ProfileResponse> register(@Valid @RequestBody RegisterRequest registerRequest) throws MessagingException, IOException {
-
-        UserDTO userDTO = authService.register(modelMapper.map(registerRequest, UserDTO.class));
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(modelMapper.map(userDTO, ProfileResponse.class));
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest registerRequest) throws MessagingException, IOException {
+        authService.register(modelMapper.map(registerRequest, UserDTO.class));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")

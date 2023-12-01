@@ -1,0 +1,14 @@
+package ru.ccfit.nsu.chernovskaya.Archipio.profile.requests;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class ChangeMainImageRequest {
+    private String mainImage;
+}

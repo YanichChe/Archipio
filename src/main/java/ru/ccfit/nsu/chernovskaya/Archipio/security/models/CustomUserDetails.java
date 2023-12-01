@@ -36,7 +36,7 @@ public class CustomUserDetails
     @JoinColumn(nullable = false)
     private User user;
 
-    @ManyToMany(mappedBy = "customUserDetails")
+    @ManyToMany(mappedBy = "customUserDetails", fetch = FetchType.EAGER)
     @Column(name = "role")
     private List<Roles> rolesList;
 
