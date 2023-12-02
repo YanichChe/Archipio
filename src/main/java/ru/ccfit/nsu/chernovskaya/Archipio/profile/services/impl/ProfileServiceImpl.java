@@ -43,7 +43,8 @@ public class ProfileServiceImpl implements ProfileService {
      */
     @Override
     public UserDTO changeLogin(User user, @Valid ChangeLoginDTO changeLoginDTO) {
-        user.setLogin(changeLoginDTO.getNewLogin());
+        log.debug(changeLoginDTO.getLogin());
+        user.setLogin(changeLoginDTO.getLogin());
         User savedUser = userRepository.save(user);
         return  modelMapper.map(savedUser, UserDTO.class);
     }
@@ -61,7 +62,7 @@ public class ProfileServiceImpl implements ProfileService {
             throw new BadCredentialsException("Wrong password");
         }
 
-        customUserDetails.setPassword(changePasswordDTO.getNewPassword());
+        customUserDetails.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
         userDetailsRepository.save(customUserDetails);
     }
 

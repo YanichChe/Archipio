@@ -17,6 +17,8 @@ import ru.ccfit.nsu.chernovskaya.Archipio.auth.services.EmailService;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.dto.TokensDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.models.CustomUserDetails;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.models.JwtTokens;
+import ru.ccfit.nsu.chernovskaya.Archipio.security.models.Roles;
+import ru.ccfit.nsu.chernovskaya.Archipio.security.repositories.RolesRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.repositories.UserDetailsRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.services.JwtTokenService;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.services.VerificationTokenService;
@@ -25,8 +27,10 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.exceptions.UserAlreadyExistExcept
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.repositories.UserRepository;
 
+import javax.management.relation.Role;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,6 +48,7 @@ public class AuthServiceImpl
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RolesRepository rolesRepository;
 
     @Override
     public UserDTO register(@Valid UserDTO userDTO) throws MessagingException, IOException {
@@ -59,6 +64,7 @@ public class AuthServiceImpl
 
         CustomUserDetails userDetails = new CustomUserDetails();
         userDetails.setUser(savedUser);
+        userDetails.setRolesList(List.of(rolesRepository.findById(1L).orElseThrow()));
         userDetails.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userDetails.setIsActive(false);
 

@@ -2,6 +2,7 @@ package ru.ccfit.nsu.chernovskaya.Archipio.profile.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,7 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 @RestController
 @RequestMapping("/profile")
 @AllArgsConstructor
+@Slf4j
 public class ProfileController {
 
     private final ProfileService profileService;
