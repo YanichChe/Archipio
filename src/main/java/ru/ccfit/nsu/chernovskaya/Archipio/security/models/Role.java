@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Roles implements GrantedAuthority {
+public class Role implements GrantedAuthority {
 
     @Id
     protected Long id;
@@ -24,13 +25,9 @@ public class Roles implements GrantedAuthority {
             unique = true)
     private String role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "UserDetails_Roles",
-            joinColumns = { @JoinColumn(name = "role_id") },
-            inverseJoinColumns = { @JoinColumn(name = "userDetails_id") }
-    )
-    private List<CustomUserDetails> customUserDetails;
+
+    @ManyToMany(mappedBy = "roleList", fetch = FetchType.EAGER)
+    private List<CustomUserDetails> customUserDetails = new ArrayList<>();
 
     @Override
     public String getAuthority() {

@@ -17,7 +17,6 @@ import ru.ccfit.nsu.chernovskaya.Archipio.auth.services.EmailService;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.dto.TokensDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.models.CustomUserDetails;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.models.JwtTokens;
-import ru.ccfit.nsu.chernovskaya.Archipio.security.models.Roles;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.repositories.RolesRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.repositories.UserDetailsRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.services.JwtTokenService;
@@ -27,11 +26,8 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.exceptions.UserAlreadyExistExcept
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.repositories.UserRepository;
 
-import javax.management.relation.Role;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -64,7 +60,7 @@ public class AuthServiceImpl
 
         CustomUserDetails userDetails = new CustomUserDetails();
         userDetails.setUser(savedUser);
-        userDetails.setRolesList(List.of(rolesRepository.findById(1L).orElseThrow()));
+        userDetails.setRoleList(List.of(rolesRepository.findById(1L).orElseThrow()));
         userDetails.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userDetails.setIsActive(false);
 

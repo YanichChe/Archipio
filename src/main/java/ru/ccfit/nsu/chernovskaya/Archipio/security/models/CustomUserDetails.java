@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 
-import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,13 +36,20 @@ public class CustomUserDetails
     @JoinColumn(nullable = false)
     private User user;
 
-    @ManyToMany(mappedBy = "customUserDetails", fetch = FetchType.EAGER)
-    @Column(name = "role")
-    private List<Roles> rolesList;
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name = "user_details_roles",
+            joinColumns = {@JoinColumn(name = "role_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_details_id")}
+    )
+    private List<Role> roleList = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return rolesList;
+        return roleList;
     }
 
     @Override
