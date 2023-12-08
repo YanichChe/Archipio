@@ -39,7 +39,7 @@ public class CustomUserDetails
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
-    })
+    }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_details_roles",
             joinColumns = {@JoinColumn(name = "role_id")},

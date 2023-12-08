@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +16,15 @@ import ru.ccfit.nsu.chernovskaya.Archipio.profile.requests.ChangeMainImageReques
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.requests.ChangePasswordRequest;
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.responses.ProfileResponse;
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.services.ProfileService;
+import ru.ccfit.nsu.chernovskaya.Archipio.project.dtos.ProjectDTO;
+import ru.ccfit.nsu.chernovskaya.Archipio.project.mapper.ProjectMapper;
+import ru.ccfit.nsu.chernovskaya.Archipio.project.requests.ProjectCreateRequest;
+import ru.ccfit.nsu.chernovskaya.Archipio.project.responses.ProjectFullResponse;
+import ru.ccfit.nsu.chernovskaya.Archipio.project.service.ProjectService;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.dtos.UserDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/profile")

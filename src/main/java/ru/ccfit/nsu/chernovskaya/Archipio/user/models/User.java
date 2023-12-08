@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.ccfit.nsu.chernovskaya.Archipio.project.models.Project;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -33,4 +36,7 @@ public class User {
 
     @Column(unique = true, columnDefinition = "varchar(256) default '/home/downloads/apple.png'")
     private String profilePic;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Project> projects = new ArrayList<>();
 }
