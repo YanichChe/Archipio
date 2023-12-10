@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProjectService {
-    List<ProjectDTO> getAllUserProjects(User user);
-    List<ProjectDTO> getAllPublicProjects();
+    List<ProjectDTO> getAllUserProjects(User user, User user_) throws IOException;
+    List<ProjectDTO> getAllPublicProjects() throws IOException;
 
     ProjectDTO getProject(String projectTitle);
     ProjectDTO createProject(User user, ProjectDTO projectDTO) throws IOException;
-    ProjectDTO updateProject(User user, ProjectDTO projectDTO);
-    void deleteProject(User user, int projectId);
+    ProjectDTO updateProject(User user, ProjectDTO projectDTO) throws IOException;
+    void deleteProject(User user, String projectTitle);
 }

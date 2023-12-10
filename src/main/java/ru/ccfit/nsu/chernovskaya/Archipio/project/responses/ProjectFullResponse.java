@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +20,7 @@ public class ProjectFullResponse {
     private List<String> tags;
     private long likes;
     private long views;
-    private List<MultipartFile> files;
-    private MultipartFile mainImage;
+    private List<UUID> files;
+    private UUID mainImage;
     private boolean visibility;
 }

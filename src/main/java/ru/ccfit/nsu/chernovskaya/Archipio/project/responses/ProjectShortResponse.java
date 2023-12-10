@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +18,6 @@ public class ProjectShortResponse {
     private String description;
     private String owner;
     private List<String> tags;
-    private MultipartFile mainImage;
+    private UUID mainImage;
     private boolean visibility;
 }

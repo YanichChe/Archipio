@@ -9,6 +9,7 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "projects")
 @AllArgsConstructor
@@ -43,8 +44,8 @@ public class Project {
     @Column(name = "visibility", nullable = false, columnDefinition = "boolean default false")
     private boolean visibility;
 
-    @Column(name = "main_image", nullable = false, columnDefinition = "varchar(90) default 'defaultImage'")
-    private String mainImage;
+    @Column(name = "main_image", nullable = false, columnDefinition = "uuid default '21e22474-d31f-4119-8478-d9d448727cfe'")
+    private UUID mainImage;
 
     @ManyToOne
     @Cascade(CascadeType.REMOVE)
