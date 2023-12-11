@@ -8,13 +8,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.dtos.ProjectDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.exceptions.ProjectNotFoundException;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.mapper.ProjectMapper;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.models.File;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.models.File;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.models.Project;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.models.Tag;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.repositories.FileRepository;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.repositories.FileRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.repositories.ProjectRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.repositories.TagRepository;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.service.FileLoader;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.services.FileService;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.service.ProjectService;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 
@@ -34,7 +34,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final TagRepository tagRepository;
     private final FileRepository fileRepository;
     private final ProjectMapper projectMapper;
-    private final FileLoader fileLoader;
+    private final FileService fileService;
 
     /**
      * Возвращает список проектов определенного пользователя. Если пользователь, отправивший запрос, совпадает с
@@ -92,8 +92,8 @@ public class ProjectServiceImpl implements ProjectService {
 
         setParams(projectDTO, project, user);
 
+        log.info(project.toString());
         Project savedProject = projectRepository.save(project);
-        log.info(savedProject.toString());
 
         ProjectDTO projectDTO1 = new ProjectDTO();
         projectMapper.map(savedProject, projectDTO1);
@@ -169,13 +169,13 @@ public class ProjectServiceImpl implements ProjectService {
         List<File> projectFiles = new ArrayList<>();
         if (projectDTO.getFiles() != null) {
             for (MultipartFile file : projectDTO.getFiles()) {
-                fileLoader.load(file);
+                fileService.load(file);
                 projectFiles.add(saveFile(file.getName()));
             }
         }
 
         if (projectDTO.getMainImage() != null) {
-            fileLoader.load(projectDTO.getMainImage());
+            fileService.load(projectDTO.getMainImage());
         }
 
         project.setDescription(projectDTO.getDescription());

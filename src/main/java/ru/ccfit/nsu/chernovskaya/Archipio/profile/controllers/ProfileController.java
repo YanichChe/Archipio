@@ -58,7 +58,7 @@ public class ProfileController {
 
     @PutMapping("/edit/main-image")
     public ResponseEntity<ProfileResponse> changeMainImage(@AuthenticationPrincipal User user,
-                                                           @RequestBody ChangeMainImageRequest changeMainImageRequest) {
+                                                           @RequestBody ChangeMainImageRequest changeMainImageRequest) throws IOException {
         UserDTO userDTO = profileService.changeMainImage(user, modelMapper.map(changeMainImageRequest, ChangeMainImageDTO.class));
         return ResponseEntity.ok().body(modelMapper.map(userDTO, ProfileResponse.class));
     }

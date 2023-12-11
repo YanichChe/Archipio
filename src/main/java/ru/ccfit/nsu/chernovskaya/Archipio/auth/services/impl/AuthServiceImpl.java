@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +29,7 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.repositories.UserRepository;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -46,6 +48,9 @@ public class AuthServiceImpl
     private final PasswordEncoder passwordEncoder;
     private final RolesRepository rolesRepository;
 
+    @Value("${default.image.uuid}")
+    private UUID defaultImageUUID;
+
     @Override
     public UserDTO register(@Valid UserDTO userDTO) throws MessagingException, IOException {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
@@ -55,7 +60,9 @@ public class AuthServiceImpl
         }
 
         User user = modelMapper.map(userDTO, User.class);
-
+        if (user.getProfilePic() == null) {
+            user.setProfilePic(defaultImageUUID);
+        }
         User savedUser = userRepository.save(user);
 
         CustomUserDetails userDetails = new CustomUserDetails();

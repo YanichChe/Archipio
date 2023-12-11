@@ -8,6 +8,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.models.File;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.repositories.FileRepository;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.services.FileService;
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.dtos.ChangeLoginDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.dtos.ChangeMainImageDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.dtos.ChangePasswordDTO;
@@ -18,6 +21,8 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.dtos.UserDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.repositories.UserRepository;
 
+import java.io.IOException;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -26,6 +31,8 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserRepository userRepository;
     private final UserDetailsRepository userDetailsRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileService fileService;
+    private final FileRepository fileRepository;
 
     /**
      * @param user пользователь, сделавший запрос на обновление профиля
@@ -72,8 +79,12 @@ public class ProfileServiceImpl implements ProfileService {
      * @return обновленный пользователь
      */
     @Override
-    public UserDTO changeMainImage(User user, ChangeMainImageDTO changeMainImageDTO) {
-        user.setProfilePic(changeMainImageDTO.getNewImage());
+    public UserDTO changeMainImage(User user, ChangeMainImageDTO changeMainImageDTO) throws IOException {
+        String fileName = fileService.load(changeMainImageDTO.getNewImage());
+        File file = new File();
+        file.setName(fileName);
+        File savedFile = fileRepository.save(file);
+        user.setProfilePic(savedFile.getId());
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserDTO.class);
     }

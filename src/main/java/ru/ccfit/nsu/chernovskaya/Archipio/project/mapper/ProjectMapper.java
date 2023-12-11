@@ -1,26 +1,19 @@
 package ru.ccfit.nsu.chernovskaya.Archipio.project.mapper;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.dtos.ProjectDTO;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.models.File;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.models.File;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.models.Project;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.models.Tag;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.repositories.FileRepository;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.repositories.FileRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.requests.ProjectCreateRequest;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.responses.ProjectFullResponse;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.responses.ProjectShortResponse;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.service.FileLoader;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.services.FileService;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,13 +23,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProjectMapper {
 
-    private final FileLoader fileLoader;
+    private final FileService fileService;
     private final FileRepository fileRepository;
 
     public void map(Project project, ProjectDTO projectDTO) throws IOException {
 
         List<MultipartFile> files = new ArrayList<>();
-        for (ru.ccfit.nsu.chernovskaya.Archipio.project.models.File file: project.getFiles()) {
+        for (File file: project.getFiles()) {
             files.add(map(file));
         }
 
@@ -48,7 +41,7 @@ public class ProjectMapper {
         projectDTO.setViews(project.getViews());
         projectDTO.setFiles(files);
         projectDTO.setVisibility(project.isVisibility());
-        projectDTO.setMainImage(fileLoader.getFileUUID(project.getMainImage()));
+        projectDTO.setMainImage(fileService.getFileUUID(project.getMainImage()));
     }
 
     private List<String> map(List<Tag> tags) {
@@ -61,7 +54,7 @@ public class ProjectMapper {
     }
 
     private MultipartFile map(File file) throws IOException {
-        return fileLoader.getFileUUID(file.getId());
+        return fileService.getFileUUID(file.getId());
     }
 
     public void map(ProjectCreateRequest projectCreateRequest, ProjectDTO projectDTO, String userName) {

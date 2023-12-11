@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,5 +21,6 @@ public class ProfileResponse {
             message = "Email has invalid format")
     private String email;
 
-    private String mainImage;
+    private UUID mainImage;
 }
+

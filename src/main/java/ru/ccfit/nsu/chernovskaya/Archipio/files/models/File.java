@@ -1,4 +1,4 @@
-package ru.ccfit.nsu.chernovskaya.Archipio.project.models;
+package ru.ccfit.nsu.chernovskaya.Archipio.files.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import ru.ccfit.nsu.chernovskaya.Archipio.project.models.Project;
 
 import java.util.UUID;
 

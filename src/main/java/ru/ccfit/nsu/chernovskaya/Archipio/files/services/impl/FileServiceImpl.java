@@ -1,13 +1,13 @@
-package ru.ccfit.nsu.chernovskaya.Archipio.project.service.impl;
+package ru.ccfit.nsu.chernovskaya.Archipio.files.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.models.File;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.repositories.FileRepository;
-import ru.ccfit.nsu.chernovskaya.Archipio.project.service.FileLoader;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.repositories.FileRepository;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.models.File;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.services.FileService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class FileLoaderImpl implements FileLoader {
+public class FileServiceImpl implements FileService {
 
     @Value("${file.upload-dir}")
     private String uploadDir;

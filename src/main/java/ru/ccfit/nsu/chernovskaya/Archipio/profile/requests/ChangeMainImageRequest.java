@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class ChangeMainImageRequest {
-    private String mainImage;
+    private MultipartFile mainImage;
 }

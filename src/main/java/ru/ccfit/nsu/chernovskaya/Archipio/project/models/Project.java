@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import ru.ccfit.nsu.chernovskaya.Archipio.files.models.File;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 
 import java.util.ArrayList;
@@ -54,4 +55,20 @@ public class Project {
 
     @ManyToMany
     private List<Tag> tags = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", files=" + files +
+                ", likes=" + likes +
+                ", views=" + views +
+                ", visibility=" + visibility +
+                ", mainImage=" + mainImage +
+                ", owner=" + owner +
+                ", tags=" + tags +
+                '}';
+    }
 }

@@ -28,5 +28,5 @@ public class UserDTO {
                     "Password length must be more than or equal to 8 symbols")
     private String password;
 
-    private String profilePic;
+    private MultipartFile profilePic;
 }

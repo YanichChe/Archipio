@@ -19,4 +19,16 @@ public class ProjectCreateRequest {
     private List<MultipartFile> files;
     private MultipartFile mainImage;
     private boolean visibility;
+
+    @Override
+    public String toString() {
+        return "ProjectCreateRequest{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", tags=" + tags +
+                ", files=" + files +
+                ", mainImage=" + mainImage +
+                ", visibility=" + visibility +
+                '}';
+    }
 }
