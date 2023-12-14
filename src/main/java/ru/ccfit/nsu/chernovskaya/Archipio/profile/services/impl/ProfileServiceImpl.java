@@ -8,6 +8,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.ccfit.nsu.chernovskaya.Archipio.files.models.File;
 import ru.ccfit.nsu.chernovskaya.Archipio.files.repositories.FileRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.files.services.FileService;
@@ -75,12 +76,12 @@ public class ProfileServiceImpl implements ProfileService {
 
     /**
      * @param user пользователь, сделавший запрос на обновление иконки профиля
-     * @param changeMainImageDTO запрос на обновление иконки профиля
+     * @param multipartFile запрос на обновление иконки профиля
      * @return обновленный пользователь
      */
     @Override
-    public UserDTO changeMainImage(User user, ChangeMainImageDTO changeMainImageDTO) throws IOException {
-        String fileName = fileService.load(changeMainImageDTO.getNewImage());
+    public UserDTO changeMainImage(User user,  MultipartFile multipartFile) throws IOException {
+        String fileName = fileService.load(multipartFile);
         File file = new File();
         file.setName(fileName);
         File savedFile = fileRepository.save(file);

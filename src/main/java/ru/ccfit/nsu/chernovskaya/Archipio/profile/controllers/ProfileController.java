@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.dtos.ChangeLoginDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.dtos.ChangeMainImageDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.profile.dtos.ChangePasswordDTO;
@@ -37,15 +38,16 @@ public class ProfileController {
 
     @GetMapping("/show")
     ResponseEntity<ProfileResponse> showProfile(@AuthenticationPrincipal User user) {
-        UserDTO userDTO = profileService.getProfile(user);
-        return ResponseEntity.ok().body(modelMapper.map(userDTO, ProfileResponse.class));
+        ProfileResponse profileResponse = new ProfileResponse(user.getLogin(), user.getEmail(), user.getProfilePic());
+        return ResponseEntity.ok().body(profileResponse);
     }
 
     @PutMapping("/edit/login")
     public ResponseEntity<ProfileResponse> changeName(@AuthenticationPrincipal User user,
                                                       @Valid @RequestBody ChangeLoginRequest changeLoginRequest) {
-        UserDTO userDTO = profileService.changeLogin(user, modelMapper.map(changeLoginRequest, ChangeLoginDTO.class));
-        return ResponseEntity.ok().body(modelMapper.map(userDTO, ProfileResponse.class));
+        profileService.changeLogin(user, modelMapper.map(changeLoginRequest, ChangeLoginDTO.class));
+        ProfileResponse profileResponse = new ProfileResponse(user.getLogin(), user.getEmail(), user.getProfilePic());
+        return ResponseEntity.ok().body(profileResponse);
     }
 
     @PutMapping("/edit/password")
@@ -56,10 +58,11 @@ public class ProfileController {
     }
 
 
-    @PutMapping("/edit/main-image")
+    @PutMapping(value = "/edit/main-image", consumes = {"multipart/form-data"})
     public ResponseEntity<ProfileResponse> changeMainImage(@AuthenticationPrincipal User user,
-                                                           @RequestBody ChangeMainImageRequest changeMainImageRequest) throws IOException {
-        UserDTO userDTO = profileService.changeMainImage(user, modelMapper.map(changeMainImageRequest, ChangeMainImageDTO.class));
-        return ResponseEntity.ok().body(modelMapper.map(userDTO, ProfileResponse.class));
+                                                           @RequestBody MultipartFile multipartFile) throws IOException {
+        profileService.changeMainImage(user, multipartFile);
+        ProfileResponse profileResponse = new ProfileResponse(user.getLogin(), user.getEmail(), user.getProfilePic());
+        return ResponseEntity.ok().body(profileResponse);
     }
 }

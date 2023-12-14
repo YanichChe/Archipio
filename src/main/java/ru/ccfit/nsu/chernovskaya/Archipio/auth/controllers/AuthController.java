@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ccfit.nsu.chernovskaya.Archipio.auth.dtos.AuthDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.auth.requests.LoginRequest;
+import ru.ccfit.nsu.chernovskaya.Archipio.auth.requests.ResetPasswordRequest;
 import ru.ccfit.nsu.chernovskaya.Archipio.auth.responses.TokensResponse;
 import ru.ccfit.nsu.chernovskaya.Archipio.auth.services.AuthService;
 import ru.ccfit.nsu.chernovskaya.Archipio.security.dto.TokensDTO;
@@ -55,10 +56,9 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<ProfileResponse> resetPassword(
+    public ResponseEntity<?> resetPassword(
             @Valid @RequestBody LoginRequest resetPasswordRequest) throws MessagingException, IOException {
-        UserDTO userDTO = authService.resetPassword(modelMapper.map(resetPasswordRequest, AuthDTO.class));
-        return ResponseEntity.ok()
-                .body(modelMapper.map(userDTO, ProfileResponse.class));
+        authService.resetPassword(modelMapper.map(resetPasswordRequest, AuthDTO.class));
+        return ResponseEntity.ok().build();
     }
 }

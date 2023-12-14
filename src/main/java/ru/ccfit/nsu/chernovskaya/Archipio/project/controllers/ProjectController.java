@@ -32,14 +32,6 @@ public class ProjectController {
     @Value("${file.upload-dir}")
     private String uploadDirectory;
 
-    /*@GetMapping(name = "/get-short-project")
-    ResponseEntity<ProjectShortResponse> showShortProject(@RequestParam String projectTitle) {
-        ProjectDTO projectDTO = projectService.getProject(projectTitle);
-        ProjectShortResponse projectShortResponse = new ProjectShortResponse();
-        projectMapper.map(projectDTO, projectShortResponse);
-        return ResponseEntity.ok().body(projectShortResponse);
-    }*/
-
     @GetMapping(name = "/get-full-project")
     ResponseEntity<ProjectFullResponse> showFullProject(@RequestParam String projectTitle) {
         ProjectDTO projectDTO = projectService.getProject(projectTitle);
