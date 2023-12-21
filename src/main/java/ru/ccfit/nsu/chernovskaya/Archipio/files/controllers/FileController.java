@@ -5,10 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ccfit.nsu.chernovskaya.Archipio.files.exceptions.FileNotFoundException;
@@ -17,16 +15,12 @@ import ru.ccfit.nsu.chernovskaya.Archipio.files.repositories.FileRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.files.response.UploadFileResponse;
 import ru.ccfit.nsu.chernovskaya.Archipio.files.services.FileService;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
-
-import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
 
 @RestController
 @RequestMapping("/files")
@@ -55,10 +49,9 @@ public class FileController {
     }
 
     @PostMapping(value="/upload", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<UploadFileResponse> handleFileUpload(@RequestParam("file") MultipartFile file,
-                                                               @RequestParam("project") String projectTitle) throws IOException {
+    public ResponseEntity<UploadFileResponse> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
 
-        UUID uuid = fileService.load(file, projectTitle);
+        UUID uuid = fileService.load(file);
 
         return ResponseEntity.ok().body(new UploadFileResponse(uuid));
     }

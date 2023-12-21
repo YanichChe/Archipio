@@ -6,6 +6,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 public interface FileService {
-    UUID load(MultipartFile multipartFile, String projectTitle) throws IOException;
+    UUID load(MultipartFile multipartFile) throws IOException;
     MultipartFile getFileUUID(UUID uuid) throws IOException;
 }

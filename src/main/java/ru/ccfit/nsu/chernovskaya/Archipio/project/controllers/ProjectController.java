@@ -59,7 +59,7 @@ public class ProjectController {
 
         ProjectDTO projectDTO_ = projectService.createProject(user, projectDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping()

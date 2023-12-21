@@ -31,12 +31,18 @@ public class FileServiceImpl implements FileService {
     private final ProjectRepository projectRepository;
 
     @Override
-    public UUID load(MultipartFile file, String projectTitle) {
+    public UUID load(MultipartFile file) {
+        int i = 0;
+        StringBuilder stringBuilder = new StringBuilder(file.getName());
+        while (fileRepository.findByName(uploadDir + stringBuilder).isPresent()) {
+            stringBuilder.append(i++);
+        }
+
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(uploadDir + file.getName()));
+                        new BufferedOutputStream(new FileOutputStream(uploadDir + stringBuilder));
                 stream.write(bytes);
                 stream.close();
             } catch (Exception e) {
@@ -44,15 +50,8 @@ public class FileServiceImpl implements FileService {
             }
         }
 
-        int i = 0;
-        StringBuilder stringBuilder = new StringBuilder(file.getName());
-        while (fileRepository.findByName(uploadDir + stringBuilder).isPresent()) {
-            stringBuilder.append(i++);
-        }
-
         File newFile = new File();
         newFile.setName(uploadDir + stringBuilder);
-        newFile.setProject(projectRepository.findByTitleLike(projectTitle).get());
         File savedFile = fileRepository.save(newFile);
 
         log.info(String.valueOf(savedFile.getId()));

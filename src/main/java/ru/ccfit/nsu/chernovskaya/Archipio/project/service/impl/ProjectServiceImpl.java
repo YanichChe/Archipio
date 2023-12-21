@@ -2,7 +2,6 @@ package ru.ccfit.nsu.chernovskaya.Archipio.project.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.dtos.ProjectDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.exceptions.ProjectNotFoundException;
@@ -25,7 +24,6 @@ import java.util.*;
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
-    private final ModelMapper modelMapper;
     private final TagRepository tagRepository;
     private final FileRepository fileRepository;
     private final ProjectMapper projectMapper;
@@ -166,6 +164,7 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
 
+        log.info(projectDTO.toString());
         project.setDescription(projectDTO.getDescription());
         project.setOwner(owner);
         project.setTags(projectTags);
@@ -173,6 +172,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setVisibility(projectDTO.isVisibility());
         project.setLikes(0);
         project.setViews(0);
-        project.setMainImage(fileRepository.findByName("/home/tc/archipio/" + "default.jpg").get().getId());
+        if (projectDTO.getMainImage() != null) project.setMainImage(projectDTO.getMainImage());
+        else project.setMainImage(fileRepository.findByName("/home/tc/archipio/" + "default.jpg").get().getId());
     }
 }

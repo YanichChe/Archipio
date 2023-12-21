@@ -55,7 +55,7 @@ public class ProjectMapper {
         projectDTO.setOwner(userName);
         projectDTO.setTags(projectCreateRequest.getTags());
         if (projectCreateRequest.getFiles() != null) projectDTO.setFiles(projectCreateRequest.getFiles());
-        if (projectCreateRequest.getMainImage() != null) projectDTO.setMainImage(projectCreateRequest.getMainImage());
+        if (projectCreateRequest.getMainImage() != null) projectDTO.setMainImage(UUID.fromString(projectCreateRequest.getMainImage()));
         projectDTO.setVisibility(projectCreateRequest.isVisibility());
     }
 

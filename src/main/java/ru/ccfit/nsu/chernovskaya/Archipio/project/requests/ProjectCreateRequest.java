@@ -20,5 +20,5 @@ public class ProjectCreateRequest {
     private List<String> tags;
     private List<UUID> files;
     private boolean visibility;
-    private UUID mainImage;
+    private String mainImage;
 }
