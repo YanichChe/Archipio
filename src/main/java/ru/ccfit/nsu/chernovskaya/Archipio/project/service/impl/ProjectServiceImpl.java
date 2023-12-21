@@ -41,6 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public List<ProjectDTO> getAllUserProjects(User user, String userLogin) throws IOException {
+
         List<ProjectDTO> projectDTOS= new ArrayList<>();
 
         List<Project> result;
@@ -125,7 +126,10 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO getProject(String projectTitle) {
         Project project = projectRepository.findByTitleLike(projectTitle).orElseThrow(() ->
                 new ProjectNotFoundException("Project with title" + projectTitle + "not found"));
-        return modelMapper.map(project, ProjectDTO.class);
+        ProjectDTO projectDTO  = new ProjectDTO();
+        projectMapper.map(project, projectDTO);
+
+        return projectDTO;
     }
 
     @Override

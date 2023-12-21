@@ -30,8 +30,8 @@ public class ProjectController {
     private final ProjectMapper projectMapper;
     private final ProjectService projectService;
 
-    @GetMapping(name = "/get-full-project")
-    ResponseEntity<ProjectFullResponse> showFullProject(@RequestParam String projectTitle) {
+    @GetMapping("/get-full-project/{projectTitle}")
+    ResponseEntity<ProjectFullResponse> showFullProject(@PathVariable String projectTitle) {
         ProjectDTO projectDTO = projectService.getProject(projectTitle);
         ProjectFullResponse projectFullResponse = new ProjectFullResponse();
         projectMapper.map(projectDTO, projectFullResponse);
@@ -83,13 +83,14 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(projectShortResponses);
     }
 
-    @GetMapping("/get-all-user-projects")
-    public ResponseEntity<List<ProjectShortResponse>> getAllUserProjects(@AuthenticationPrincipal User user, String userLogin)
+    @GetMapping("/get-all-user-projects/{userLogin}")
+    public ResponseEntity<List<ProjectFullResponse>> getAllUserProjects(@AuthenticationPrincipal User user, @PathVariable String userLogin)
             throws IOException {
+
         List<ProjectDTO> projectDTOS = projectService.getAllUserProjects(user, userLogin);
-        List<ProjectShortResponse> projectShortResponses = new ArrayList<>();
+        List<ProjectFullResponse> projectShortResponses = new ArrayList<>();
         for (ProjectDTO projectDTO: projectDTOS) {
-            ProjectShortResponse projectShortResponse = new ProjectShortResponse();
+            ProjectFullResponse projectShortResponse = new ProjectFullResponse();
             projectMapper.map(projectDTO, projectShortResponse);
             projectShortResponses.add(projectShortResponse);
         }

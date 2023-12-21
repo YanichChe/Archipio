@@ -8,6 +8,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ccfit.nsu.chernovskaya.Archipio.files.exceptions.FileNotFoundException;
@@ -25,6 +26,8 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
+
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor
@@ -37,19 +40,18 @@ public class FileController {
     private final FileRepository fileRepository;
     private final FileService fileService;
 
-    @GetMapping("/{uuid}")
-    @ResponseBody
-    public ResponseEntity<Resource> getFile(@PathVariable UUID uuid) throws MalformedURLException {
-        Optional<File> file = fileRepository.findById(uuid);
+    @GetMapping(value = "/{uuid}",  produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<Resource> getFile(@PathVariable String uuid) throws MalformedURLException {
+
+        Optional<File> file = fileRepository.findById(UUID.fromString(uuid));
         if (file.isEmpty()) {
-            throw new FileNotFoundException(uuid);
+            throw new FileNotFoundException(UUID.fromString(uuid));
         }
 
-        Path filePath = Paths.get(uploadDirectory + file.get().getName());
+        Path filePath = Paths.get(file.get().getName());
         Resource resource = new UrlResource(filePath.toUri());
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
-                        + file.get().getName() + "\"").body(resource);
+                .body(resource);
     }
 
     @PostMapping(value="/upload", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
