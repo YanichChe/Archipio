@@ -1,17 +1,16 @@
 package ru.ccfit.nsu.chernovskaya.Archipio.project.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 @Setter
 public class ProjectDTO {
     private String title;
@@ -20,22 +19,7 @@ public class ProjectDTO {
     private List<String> tags = new ArrayList<>();
     private long likes = 0;
     private long views = 0;
-    private List<MultipartFile> files = new ArrayList<>();
-    private MultipartFile mainImage;
+    private List<UUID> files = new ArrayList<>();
+    private UUID mainImage;
     private boolean visibility;
-
-    @Override
-    public String toString() {
-        return "ProjectDTO{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", owner='" + owner + '\'' +
-                ", tags=" + tags +
-                ", likes=" + likes +
-                ", views=" + views +
-                ", files=" + files +
-                ", mainImage=" + mainImage +
-                ", visibility=" + visibility +
-                '}';
-    }
 }

@@ -23,6 +23,7 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.repositories.UserRepository;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -80,12 +81,8 @@ public class ProfileServiceImpl implements ProfileService {
      * @return обновленный пользователь
      */
     @Override
-    public UserDTO changeMainImage(User user,  MultipartFile multipartFile) throws IOException {
-        String fileName = fileService.load(multipartFile);
-        File file = new File();
-        file.setName(fileName);
-        File savedFile = fileRepository.save(file);
-        user.setProfilePic(savedFile.getId());
+    public UserDTO changeMainImage(User user,  UUID multipartFile) throws IOException {
+        user.setProfilePic(multipartFile);
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserDTO.class);
     }

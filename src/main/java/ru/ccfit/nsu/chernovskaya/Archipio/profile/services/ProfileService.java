@@ -8,10 +8,11 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.dtos.UserDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public interface ProfileService {
     UserDTO getProfile(User user);
     UserDTO changeLogin(User user, ChangeLoginDTO changeLoginDTO);
     void changePassword(User user, ChangePasswordDTO changePasswordDTO);
-    UserDTO changeMainImage(User user, MultipartFile multipartFile) throws IOException;
+    UserDTO changeMainImage(User user, UUID multipartFile) throws IOException;
 }

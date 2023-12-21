@@ -26,6 +26,7 @@ import ru.ccfit.nsu.chernovskaya.Archipio.user.dtos.UserDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/profile")
@@ -60,7 +61,7 @@ public class ProfileController {
 
     @PutMapping(value = "/edit/main-image", consumes = {"multipart/form-data"})
     public ResponseEntity<ProfileResponse> changeMainImage(@AuthenticationPrincipal User user,
-                                                           @RequestBody MultipartFile multipartFile) throws IOException {
+                                                           @RequestBody UUID multipartFile) throws IOException {
         profileService.changeMainImage(user, multipartFile);
         ProfileResponse profileResponse = new ProfileResponse(user.getLogin(), user.getEmail(), user.getProfilePic());
         return ResponseEntity.ok().body(profileResponse);

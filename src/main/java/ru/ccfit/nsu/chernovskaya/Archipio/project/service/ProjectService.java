@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ProjectService {
-    List<ProjectDTO> getAllUserProjects(User user, User user_) throws IOException;
+    List<ProjectDTO> getAllUserProjects(User user, String userLogin) throws IOException;
     List<ProjectDTO> getAllPublicProjects() throws IOException;
 
     ProjectDTO getProject(String projectTitle);

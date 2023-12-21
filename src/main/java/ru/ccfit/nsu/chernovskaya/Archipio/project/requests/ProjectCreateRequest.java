@@ -1,34 +1,24 @@
 package ru.ccfit.nsu.chernovskaya.Archipio.project.requests;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ProjectCreateRequest {
     private String title;
     private String description;
     private List<String> tags;
-    private List<MultipartFile> files;
-    private MultipartFile mainImage;
+    private List<UUID> files;
     private boolean visibility;
-
-    @Override
-    public String toString() {
-        return "ProjectCreateRequest{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", tags=" + tags +
-                ", files=" + files +
-                ", mainImage=" + mainImage +
-                ", visibility=" + visibility +
-                '}';
-    }
+    private UUID mainImage;
 }

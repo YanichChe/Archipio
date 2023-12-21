@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.dtos.ProjectDTO;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.exceptions.ProjectNotFoundException;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.mapper.ProjectMapper;
@@ -14,15 +13,11 @@ import ru.ccfit.nsu.chernovskaya.Archipio.project.models.Tag;
 import ru.ccfit.nsu.chernovskaya.Archipio.files.repositories.FileRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.repositories.ProjectRepository;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.repositories.TagRepository;
-import ru.ccfit.nsu.chernovskaya.Archipio.files.services.FileService;
 import ru.ccfit.nsu.chernovskaya.Archipio.project.service.ProjectService;
 import ru.ccfit.nsu.chernovskaya.Archipio.user.models.User;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -34,26 +29,25 @@ public class ProjectServiceImpl implements ProjectService {
     private final TagRepository tagRepository;
     private final FileRepository fileRepository;
     private final ProjectMapper projectMapper;
-    private final FileService fileService;
 
     /**
      * Возвращает список проектов определенного пользователя. Если пользователь, отправивший запрос, совпадает с
      * пользователем, по которому идет поиск, то возвращает полный список, в том числе и с приватными проектами.
      *
      * @param user пользователь, чьи проекта мы ищем
-     * @param user_ пользователь, отправивший запрос на получение проектов
+     * @param userLogin пользователь, отправивший запрос на получение проектов
      * @return список проектов определенного пользователя
      * @throws IOException ошибка при работе с файлами
      */
     @Override
-    public List<ProjectDTO> getAllUserProjects(User user, User user_) throws IOException {
+    public List<ProjectDTO> getAllUserProjects(User user, String userLogin) throws IOException {
         List<ProjectDTO> projectDTOS= new ArrayList<>();
 
         List<Project> result;
-        if (Objects.equals(user.getId(), user_.getId())) {
+        if (Objects.equals(user.getLogin(), userLogin)) {
             result = projectRepository.findByOwner(user);
         } else {
-            result=  projectRepository.findByOwnerAndVisibilityTrue(user);
+            result=  projectRepository.findByOwner_LoginAndVisibilityTrue(userLogin);
         }
 
         for (Project project: result) {
@@ -150,14 +144,8 @@ public class ProjectServiceImpl implements ProjectService {
         return newTag;
     }
 
-    private File saveFile(String title) {
-        File newFile = new File();
-        newFile.setName(title);
-        fileRepository.save(newFile);
-        return newFile;
-    }
+    private void setParams(ProjectDTO projectDTO, Project project, User owner) {
 
-    private void setParams(ProjectDTO projectDTO, Project project, User owner) throws IOException {
         List<Tag> projectTags = new ArrayList<>();
         if (projectDTO.getTags() != null) {
 
@@ -166,33 +154,21 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
 
-        List<File> projectFiles = new ArrayList<>();
-        if (projectDTO.getFiles() != null) {
-            for (MultipartFile file : projectDTO.getFiles()) {
-                fileService.load(file);
-                projectFiles.add(saveFile(file.getName()));
-            }
-        }
+        List<File> files = new ArrayList<>();
 
-        if (projectDTO.getMainImage() != null) {
-            fileService.load(projectDTO.getMainImage());
+        if (projectDTO.getFiles() != null) {
+            for (UUID uuid: projectDTO.getFiles()) {
+                files.add(fileRepository.findById(uuid).get());
+            }
         }
 
         project.setDescription(projectDTO.getDescription());
         project.setOwner(owner);
         project.setTags(projectTags);
         project.setTitle(projectDTO.getTitle());
-        project.setFiles(projectFiles);
         project.setVisibility(projectDTO.isVisibility());
         project.setLikes(0);
         project.setViews(0);
-
-        log.info(project.toString());
-        if (projectDTO.getMainImage() != null) {
-            File mainImage = fileRepository.save(new File(projectDTO.getMainImage().getName()));
-            project.setMainImage(mainImage.getId());
-        } else {
-            project.setMainImage(fileRepository.findByName("default.jpg").get().getId());
-        }
+        project.setMainImage(fileRepository.findByName("/home/tc/archipio/" + "default.jpg").get().getId());
     }
 }

@@ -3,8 +3,9 @@ package ru.ccfit.nsu.chernovskaya.Archipio.project.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,6 @@ public class ProjectController {
     private final ProjectMapper projectMapper;
     private final ProjectService projectService;
 
-    @Value("${file.upload-dir}")
-    private String uploadDirectory;
-
     @GetMapping(name = "/get-full-project")
     ResponseEntity<ProjectFullResponse> showFullProject(@RequestParam String projectTitle) {
         ProjectDTO projectDTO = projectService.getProject(projectTitle);
@@ -41,30 +39,27 @@ public class ProjectController {
     }
 
     @PutMapping("/update-project")
-    public ResponseEntity<ProjectFullResponse> updateProject(@AuthenticationPrincipal User user,
+    public ResponseEntity<?> updateProject(@AuthenticationPrincipal User user,
                                                              @Valid @RequestBody ProjectCreateRequest projectCreateRequest) throws IOException {
         ProjectDTO projectDTO = new ProjectDTO();
         projectMapper.map(projectCreateRequest, projectDTO, user.getLogin());
 
         ProjectDTO projectDTO_ = projectService.updateProject(user, projectDTO);
-        ProjectFullResponse projectFullResponse = new ProjectFullResponse();
-        projectMapper.map(projectDTO_, projectFullResponse);
 
-        return ResponseEntity.status(HttpStatus.OK).body(projectFullResponse);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping("/create-project")
-    public ResponseEntity<ProjectFullResponse> createProject(@AuthenticationPrincipal User user,
+    @PostMapping(value = "/create-project")
+    public ResponseEntity<?> createProject(@AuthenticationPrincipal User user,
                                                              @Valid @RequestBody ProjectCreateRequest projectCreateRequest) throws IOException {
         ProjectDTO projectDTO = new ProjectDTO();
 
+        log.info(projectCreateRequest.toString());
         projectMapper.map(projectCreateRequest, projectDTO, user.getLogin());
 
         ProjectDTO projectDTO_ = projectService.createProject(user, projectDTO);
-        ProjectFullResponse projectFullResponse = new ProjectFullResponse();
-        projectMapper.map(projectDTO_, projectFullResponse);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(projectFullResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping()
@@ -89,9 +84,9 @@ public class ProjectController {
     }
 
     @GetMapping("/get-all-user-projects")
-    public ResponseEntity<List<ProjectShortResponse>> getAllUserProjects(@AuthenticationPrincipal User user, User user_)
+    public ResponseEntity<List<ProjectShortResponse>> getAllUserProjects(@AuthenticationPrincipal User user, String userLogin)
             throws IOException {
-        List<ProjectDTO> projectDTOS = projectService.getAllUserProjects(user, user_);
+        List<ProjectDTO> projectDTOS = projectService.getAllUserProjects(user, userLogin);
         List<ProjectShortResponse> projectShortResponses = new ArrayList<>();
         for (ProjectDTO projectDTO: projectDTOS) {
             ProjectShortResponse projectShortResponse = new ProjectShortResponse();
